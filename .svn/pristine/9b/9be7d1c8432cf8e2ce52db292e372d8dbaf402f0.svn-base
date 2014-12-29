@@ -1,0 +1,79 @@
+//
+//  IndexViewController.m
+//  Belled
+//
+//  Created by Bellnet on 14-7-29.
+//  Copyright (c) 2014年 Bellnet. All rights reserved.
+//
+
+#import "IndexViewController.h"
+
+@interface IndexViewController ()
+
+@end
+
+@implementation IndexViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.navigationItem.title = [NSString stringWithFormat:@"Welcome"];
+    // Do any additional setup after loading the view.
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+-(IBAction)wifiBtn
+{
+    //要从此类界面转换到HomeViewController类的界面,storyboard
+    WebViewViewController *tmpEdit = [self.storyboard instantiateViewControllerWithIdentifier:@"set_webView"];
+    
+    [self.navigationController pushViewController:tmpEdit animated:YES];
+    //实现页面的切换
+    //[self presentModalViewController:tmpEdit animated:YES];
+}
+
+-(IBAction)playBtn
+{
+    
+}
+
+-(IBAction)ledBtn
+{
+    ScanViewController *tmpEdit = [self.storyboard instantiateViewControllerWithIdentifier:@"scanView"];
+    [self.navigationController pushViewController:tmpEdit animated:YES];
+}
+
+-(IBAction)pageChange
+{
+    //要从此类界面转换到HomeViewController类的界面,storyboard
+    LoginViewController *tmpEdit = [self.storyboard instantiateViewControllerWithIdentifier:@"loginView"];
+ 
+    [self.navigationController pushViewController:tmpEdit animated:YES];
+    //实现页面的切换
+    //[self presentModalViewController:tmpEdit animated:YES];
+}
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

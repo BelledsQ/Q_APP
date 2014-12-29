@@ -1,0 +1,26 @@
+//
+//  Tools.h
+//  Belled
+//
+//  Created by Bellnet on 14-4-17.
+//  Copyright (c) 2014年 Bellnet. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import <CommonCrypto/CommonDigest.h>
+#import "lame.h"
+#import "MBProgressHUD.h"
+
+@interface Tools : NSObject
+
++(NSString *)md5:(NSString *)str;
++(NSMutableArray *) changeUIColorToRGB:(UIColor *)color;
+
+//caf 转 mp3
++ (void)audio_PCMtoMP3:(NSString *)cafPath Mp3Path:(NSString *)mp3Path;
+
++ (NSString *)getTimeSp;
++ (NSString *)getTimeNow;
++ (void)hideTabBar:(UITabBarController *) tabbarcontroller;
++ (void)showTabBar:(UITabBarController *) tabbarcontroller;
+@end

@@ -1,0 +1,535 @@
+//
+//  ADDAlarmViewController.m
+//  Belled
+//
+//  Created by Bellnet on 14-7-10.
+//  Copyright (c) 2014年 Bellnet. All rights reserved.
+//
+
+#import "ADDAlarmViewController.h"
+
+@interface ADDAlarmViewController ()
+
+@end
+
+@implementation ADDAlarmViewController
+{
+    GlobalSet *gt;
+    MBProgressHUD *HUD;
+    NSMutableArray *datasource;
+    NSMutableString *weeks_onoff;
+    NSMutableString *title_onoff;
+    NSMutableString *light_onoff;
+    NSMutableString *music_onoff;
+    NSMutableString *alarm_onoff;
+    int m1;
+    int m2;
+    int m3;
+    int m4;
+    int m5;
+    int m6;
+    int m7;
+    NSMutableString *w1;
+    NSMutableString *w2;
+    NSMutableString *w3;
+    NSMutableString *w4;
+    NSMutableString *w5;
+    NSMutableString *w6;
+    NSMutableString *w7;
+    
+    NSMutableString *w1s;
+    NSMutableString *w2s;
+    NSMutableString *w3s;
+    NSMutableString *w4s;
+    NSMutableString *w5s;
+    NSMutableString *w6s;
+    NSMutableString *w7s;
+    
+    NSMutableString *weeksStr;
+    NSMutableString *weeksStrs;
+    
+    NSMutableString *musicStr;
+    NSMutableString *alarmStr;
+    NSMutableString *controlStr;
+    NSMutableString *dateStr;
+}
+@synthesize  scantableView,datasource,celloptions,window,infoLabel,dataPicker;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:HUD];
+    
+    [dataPicker addTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged ];
+    
+    m1 = 0;
+    m2 = 0;
+    m3 = 0;
+    m4 = 0;
+    m5 = 0;
+    m6 = 0;
+    m7 = 0;
+    
+    w1 = [[NSMutableString alloc] initWithFormat:@"%d",0];
+    w2 = [[NSMutableString alloc] initWithFormat:@"%d",0];
+    w3 = [[NSMutableString alloc] initWithFormat:@"%d",0];
+    w4 = [[NSMutableString alloc] initWithFormat:@"%d",0];
+    w5 = [[NSMutableString alloc] initWithFormat:@"%d",0];
+    w6 = [[NSMutableString alloc] initWithFormat:@"%d",0];
+    w7 = [[NSMutableString alloc] initWithFormat:@"%d",0];
+    
+    w1s = [[NSMutableString alloc] initWithFormat:@"%@",@""];
+    w2s = [[NSMutableString alloc] initWithFormat:@"%@",@""];
+    w3s = [[NSMutableString alloc] initWithFormat:@"%@",@""];
+    w4s = [[NSMutableString alloc] initWithFormat:@"%@",@""];
+    w5s = [[NSMutableString alloc] initWithFormat:@"%@",@""];
+    w6s = [[NSMutableString alloc] initWithFormat:@"%@",@""];
+    w7s = [[NSMutableString alloc] initWithFormat:@"%@",@""];
+    
+    // Do any additional setup after loading the view.
+    weeks_onoff = [[NSMutableString alloc]initWithString:@""];
+    title_onoff = [[NSMutableString alloc]initWithString:@""];
+    light_onoff = [[NSMutableString alloc]initWithString:@""];
+    music_onoff = [[NSMutableString alloc]initWithString:@"OFF"];
+    alarm_onoff = [[NSMutableString alloc]initWithString:@"ON"];
+    
+    [self getDatas];
+   
+    scantableView.delegate = self;
+    scantableView.dataSource = self;
+    
+    [self getweekData];
+    
+    UIBarButtonItem *lButton = [[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                                                style:UIBarButtonItemStyleBordered
+                                                               target:self
+                                                               action:@selector(doClickedBack)];
+    self.navigationItem.leftBarButtonItem = lButton;
+    
+    
+    UIBarButtonItem *cButton = [[UIBarButtonItem alloc] initWithTitle:@"Submit"
+                                                                style:UIBarButtonItemStyleBordered
+                                                               target:self
+                                                               action:@selector(doSubmit)];
+    self.navigationItem.rightBarButtonItem = cButton;
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(lightOnOffData)
+                                                name:@"reRoadAlarmLight"//消息名
+                                              object:nil];//注意是nil
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(titleOnOffData)
+                                                name:@"reRoadAlarmTitle"//消息名
+                                              object:nil];//注意是nil
+}
+
+-(void)dateChanged:(id)sender{
+    UIDatePicker *control = (UIDatePicker*)sender;
+    NSDateFormatter* dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    //[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"]; // 这里是用大写的 H
+    [dateFormatter setDateFormat:@"HH:mm"]; // 这里是用大写的 H
+    NSString* dateS = [dateFormatter stringFromDate:control.date];
+    
+    dateStr = [[NSMutableString alloc] initWithFormat:@"%@",dateS];
+    
+    //NSLog(@"%@",control.date);
+    NSLog(@"%@",dateStr);
+    
+    /*添加你自己响应代码*/
+}
+
+-(void)getweekData
+{
+
+    celloptions = [[NSMutableArray arrayWithObjects:
+                    [NSMutableDictionary dictionaryWithObjectsAndKeys:w1,@"ischeck",@"Monday",@"text", nil],
+                    [NSMutableDictionary dictionaryWithObjectsAndKeys:w2,@"ischeck",@"Tuesday",@"text", nil],
+                    [NSMutableDictionary dictionaryWithObjectsAndKeys:w3,@"ischeck",@"Wednesday",@"text", nil],
+                    [NSMutableDictionary dictionaryWithObjectsAndKeys:w4,@"ischeck",@"Thursday",@"text", nil],
+                    [NSMutableDictionary dictionaryWithObjectsAndKeys:w5,@"ischeck",@"Friday",@"text", nil],
+                    [NSMutableDictionary dictionaryWithObjectsAndKeys:w6,@"ischeck",@"Saturday",@"text", nil],
+                    [NSMutableDictionary dictionaryWithObjectsAndKeys:w7,@"ischeck",@"Sunday",@"text", nil],
+                    nil] retain];
+    
+}
+
+-(void)getDatas{
+    
+    NSMutableDictionary *week = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"Week",@"title",weeks_onoff,@"onoff", nil];
+    NSMutableDictionary *title = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"Title",@"title",title_onoff,@"onoff", nil];
+    NSMutableDictionary *light = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"Light",@"title",light_onoff,@"onoff", nil];
+    NSMutableDictionary *music = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"Music",@"title",music_onoff,@"onoff", nil];
+    NSMutableDictionary *alarms = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"Alarm",@"title",alarm_onoff,@"onoff", nil];
+    datasource = [[NSMutableArray alloc] initWithObjects:week,title,light,music,alarms,nil];
+}
+
+-(void)doClickedBack
+{
+    [self.navigationController popViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"reRoadTableViewAlarmid" object:self];
+}
+
+-(void)doSubmit
+{
+    //全局变量
+   
+    gt = [GlobalSet bellSetting];
+    [HUD show:YES];
+    NSMutableDictionary *res_dictionary = [[NSMutableDictionary alloc] init];
+    res_dictionary = [self httpAlarmadd];
+    NSString *res = [res_dictionary objectForKey:@"res"];
+    
+    if([res isEqualToString:@"200"]){
+        //成功
+        [Tools showMsg:@"OK" message:@"SUCCESS!"];
+    }else if([res isEqualToString:@"100"]){
+        //失败
+        [Tools showMsg:@"Warning" message:@"Miss"];
+    }else{
+        //服端端或网络异常
+        [Tools showMsg:@"Warning" message:@"Network is error."];
+    }
+    [HUD hide:YES];
+    
+    NSLog(@"res_dictionary :%@",res_dictionary);
+   
+}
+
+-(NSMutableDictionary *)httpAlarmadd
+{
+    gt = [GlobalSet bellSetting];
+    
+    controlStr = [[NSMutableString alloc] initWithFormat:@"%@,%@:%@:%@,%@,%@,0",gt.alarmLight_switch,gt.alarmLight_red,gt.alarmLight_green,gt.alarmLight_blue,gt.alarmLight_bright,musicStr];
+    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NSString *uid = [[NSString alloc] initWithFormat:@"%@", [ud objectForKey:@"username_id"]];
+    NSString *token = [[NSString alloc] initWithFormat:@"%@", [ud objectForKey:@"accesstoken"]];
+    
+    NSMutableDictionary *res_dictionary = [[NSMutableDictionary alloc] init];
+    NSString *cmd = [NSString stringWithFormat:@"alarm_add"];
+    //封装mutableDictionary
+    NSMutableDictionary *postdata = [[NSMutableDictionary alloc] initWithObjectsAndKeys:uid,@"username_id",token,@"accesstoken",gt.alarmTitle,@"title",dateStr,@"actiontime",controlStr,@"control",weeksStr,@"weeks",alarmStr,@"iswitch",nil];
+    //mutableDictionary转NSString
+    NSString *data = [[[SBJsonWriter alloc] init] stringWithObject:postdata];
+    NSString *resdata = [NetWorkHttp httpGet:cmd Postdata:data];
+    //NSLog(@"resdata:%@",resdata);
+    if([resdata isEqualToString:@"999"]==false){
+        res_dictionary = [NetWorkHttp httpjsonParser:resdata];
+    }
+    return res_dictionary;
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(void) lightOnOffData
+{
+    gt = [GlobalSet bellSetting];
+    NSString *switchstr = [[NSString alloc]init];
+    NSString *rgbstr = [[NSString alloc]init];
+    if([gt.alarmLight_switch isEqualToString:@"1"]){
+        switchstr = [[NSString alloc]initWithString:@"ON"];
+    }else{
+        switchstr = [[NSString alloc]initWithString:@"OFF"];
+    }
+    rgbstr = [[NSString alloc]initWithFormat:@"R:%@ G:%@ B:%@",gt.alarmLight_red,gt.alarmLight_green,gt.alarmLight_blue];
+
+    light_onoff = [[NSMutableString alloc] initWithFormat:@"%@ %@ %@",switchstr,rgbstr,gt.alarmLight_bright];
+    [self reRoadTableView];
+}
+
+-(void) titleOnOffData
+{
+    gt = [GlobalSet bellSetting];
+    title_onoff = [[NSMutableString alloc] initWithFormat:@"%@",gt.alarmTitle];
+    [self reRoadTableView];
+}
+
+- (void) reRoadTableView
+{
+    scantableView.delegate = self;
+    scantableView.dataSource = self;
+    [self getDatas];
+    [self.scantableView reloadData];
+}
+
+//Delegate tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    
+    // Return the number of sections.
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    
+    // Return the number of rows in the section.
+    //NSLog(@"rows : %d",[data count]);
+    return [datasource count];
+}
+
+//cell
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //NSInteger row = [indexPath row];
+    //static NSString *MyIdentifier = @"reuseIdentifier";
+    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier forIndexPath:indexPath];
+    
+    static NSString *CellIdentifier = @"AlarmAddCell";
+    AlarmTableViewCell *cell = (AlarmTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[AlarmTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    }
+    
+    //---------- CELL BACKGROUND IMAGE -----------------------------
+    //UIImageView *imageView = [[UIImageView alloc] initWithFrame:cell.frame];
+    //UIImage *image = [UIImage imageNamed:@"LightGrey@2x.png"];
+    //imageView.image = image;
+    //cell.backgroundView = imageView;
+    //[[cell textLabel] setBackgroundColor:[UIColor clearColor]];
+    //[[cell detailTextLabel] setBackgroundColor:[UIColor clearColor]];
+    
+    NSMutableDictionary *datarow = [[NSMutableDictionary alloc] init];
+    
+    //NSString *datarow = [[NSString alloc] init];
+    
+    //NSString *rows = [NSString stringWithFormat:@"%d",indexPath.row];
+    
+    //NSLog(@"rows : %@",rows);
+    
+    datarow = [datasource objectAtIndex:indexPath.row];
+    
+    cell.sn.text = [datarow objectForKey:@"title"];
+    cell.onoff.text = [datarow objectForKey:@"onoff"];
+    
+    //cell.sn.text = datarow;
+    //Arrow
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
+    // Configure the cell...
+    return cell;
+}
+
+//点击cell
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    /*static NSString *detailIdentifier = @"lightdetail";
+     
+     SoundViewController *detail = [self.storyboard instantiateViewControllerWithIdentifier:detailIdentifier];
+     
+     NSMutableDictionary *datarow = [[NSMutableDictionary alloc] init];
+     datarow = [datasource objectAtIndex:indexPath.row];
+     
+     detail.sn = [datarow objectForKey:@"sn"];
+     
+     [self.navigationController pushViewController:detail animated:YES];*/
+    //NSLog(@"cell111111111 %d",indexPath.row);
+    if(indexPath.row == 0)
+    {
+        [self showListView];
+        //NSLog(@"week");
+    }
+    
+    if(indexPath.row == 1)
+    {
+         TitleViewController *detail = [self.storyboard instantiateViewControllerWithIdentifier:@"alarm_titleView"];
+        [self.navigationController pushViewController:detail animated:YES];
+    }
+    
+    if(indexPath.row == 2)
+    {
+        LightConViewController *detail = [self.storyboard instantiateViewControllerWithIdentifier:@"lightdetail"];
+        detail.sn = @"Light";
+        detail.contrlType = @"3";
+        [self.navigationController pushViewController:detail animated:YES];
+    }
+    
+    if(indexPath.row == 3)
+    {
+        if([music_onoff isEqualToString:@"OFF"]){
+            music_onoff = [[NSMutableString alloc]initWithString:@"ON"];
+            musicStr = [[NSMutableString alloc]initWithString:@"1"];
+        }else{
+            music_onoff = [[NSMutableString alloc]initWithString:@"OFF"];
+            musicStr = [[NSMutableString alloc]initWithString:@"0"];
+        }
+        
+        [self reRoadTableView];
+    }
+    
+    if(indexPath.row == 4)
+    {
+        if([alarm_onoff isEqualToString:@"ON"]){
+            alarm_onoff = [[NSMutableString alloc]initWithString:@"OFF"];
+            alarmStr = [[NSMutableString alloc]initWithString:@"0"];
+        }else{
+            alarm_onoff = [[NSMutableString alloc]initWithString:@"ON"];
+            alarmStr = [[NSMutableString alloc]initWithString:@"1"];
+        }
+        
+        [self reRoadTableView];
+    }
+    
+}
+
+- (void)showListView
+{
+    LeveyPopListView *lplv = [[LeveyPopListView alloc] initWithTitle:@"Week Selcet" options:celloptions];
+    lplv.delegate = self;
+    [lplv showInView:self.view animated:YES];
+    [lplv release];
+}
+
+#pragma mark - LeveyPopListView delegates
+- (void)leveyPopListView:(LeveyPopListView *)popListView didSelectedIndex:(NSInteger)anIndex
+{
+    //infoLabel.text = [NSString stringWithFormat:@"You have selected %@",[[celloptions objectAtIndex:anIndex] objectForKey:@"ischeck"]];
+    //NSLog(@"%@",[[celloptions objectAtIndex:anIndex] objectForKey:@"ischeck"]);
+    NSLog(@"%d",anIndex);
+    
+    switch(anIndex)
+    {
+        case 0:
+            w1 = [[NSMutableString alloc] initWithFormat:@"%d",[self checkSelect:m1 value:1]];
+            if([w1 isEqualToString:@"1"]){
+                w1s = [[NSMutableString alloc] initWithFormat:@"%@",@"Mon"];
+            }else{
+                w1s = [[NSMutableString alloc] initWithFormat:@"%@",@""];
+            }
+            break;
+            
+        case 1:
+            w2 = [[NSMutableString alloc] initWithFormat:@"%d",[self checkSelect:m2 value:2]];
+            if([w2 isEqualToString:@"1"]){
+                w2s = [[NSMutableString alloc] initWithFormat:@"%@",@" Tue"];
+            }else{
+                w2s = [[NSMutableString alloc] initWithFormat:@"%@",@""];
+            }
+            break;
+        
+        case 2:
+            w3 = [[NSMutableString alloc] initWithFormat:@"%d",[self checkSelect:m3 value:3]];
+            if([w3 isEqualToString:@"1"]){
+                w3s = [[NSMutableString alloc] initWithFormat:@"%@",@" Wed"];
+            }else{
+                w3s = [[NSMutableString alloc] initWithFormat:@"%@",@""];
+            }
+            break;
+            
+        case 3:
+            w4 = [[NSMutableString alloc] initWithFormat:@"%d",[self checkSelect:m4 value:4]];
+            if([w4 isEqualToString:@"1"]){
+                w4s = [[NSMutableString alloc] initWithFormat:@"%@",@" Thu"];
+            }else{
+                w4s = [[NSMutableString alloc] initWithFormat:@"%@",@""];
+            }
+            break;
+            
+        case 4:
+            w5 = [[NSMutableString alloc] initWithFormat:@"%d",[self checkSelect:m5 value:5]];
+            if([w5 isEqualToString:@"1"]){
+                w5s = [[NSMutableString alloc] initWithFormat:@"%@",@" Fri"];
+            }else{
+                w5s = [[NSMutableString alloc] initWithFormat:@"%@",@""];
+            }
+            break;
+            
+        case 5:
+            w6 = [[NSMutableString alloc] initWithFormat:@"%d",[self checkSelect:m6 value:6]];
+            if([w6 isEqualToString:@"1"]){
+                w6s = [[NSMutableString alloc] initWithFormat:@"%@",@" Sat"];
+            }else{
+                w6s = [[NSMutableString alloc] initWithFormat:@"%@",@""];
+            }
+            break;
+            
+        case 6:
+            w7 = [[NSMutableString alloc] initWithFormat:@"%d",[self checkSelect:m7 value:7]];
+            if([w7 isEqualToString:@"1"]){
+                w7s = [[NSMutableString alloc] initWithFormat:@"%@",@" Sun"];
+            }else{
+                w7s = [[NSMutableString alloc] initWithFormat:@"%@",@""];
+            }
+            break;
+    }
+    weeksStr = [[NSMutableString alloc] initWithFormat:@"%@,%@,%@,%@,%@,%@,%@",w1,w2,w3,w4,w5,w6,w7];
+    
+    gt.alarmWeek = [weeksStr copy];
+    weeksStrs = [[NSMutableString alloc] initWithFormat:@"%@%@%@%@%@%@%@",w1s,w2s,w3s,w4s,w5s,w6s,w7s];
+    NSLog(@"%@---%@",weeksStr,weeksStrs);
+    
+}
+
+-(int)checkSelect:(int)v value:(int)vo
+{
+    int n;
+    if(v%2==0){
+        n = 1;
+    }else{
+        n = 0;
+    }
+    switch(vo)
+    {
+        case 1:
+            m1++;
+            break;
+            
+        case 2:
+            m2++;
+            break;
+            
+        case 3:
+            m3++;
+            break;
+            
+        case 4:
+            m4++;
+            break;
+            
+        case 5:
+            m5++;
+            break;
+            
+        case 6:
+            m6++;
+            break;
+            
+        case 7:
+            m7++;
+            break;
+    
+    }
+    return n;
+}
+
+- (void)leveyPopListViewDidCancel
+{
+    [self getweekData];
+    weeks_onoff = [weeksStrs copy];
+    [self reRoadTableView];
+    //NSLog(@"finnall");
+}
+
+#pragma mark - QCheckBoxDelegate
+
+- (void)didSelectedCheckBox:(QCheckBox *)checkbox checked:(BOOL)checked {
+   // NSLog(@"did tap on CheckBox:%@ checked:%d", checkbox.titleLabel.text, checked);
+}
+
+@end

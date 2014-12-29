@@ -1,0 +1,38 @@
+//
+//  LightSceneTableViewCell.m
+//  Belled
+//
+//  Created by Bellnet on 14-4-25.
+//  Copyright (c) 2014年 Bellnet. All rights reserved.
+//
+
+#import "DevicesTableViewCell.h"
+
+@implementation DevicesTableViewCell
+
+@synthesize  sn,model,imagesel,groupbanding;
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        // Initialization code
+        [self addSubview:imagesel];
+     
+    }
+    return self;
+}
+
+- (void)awakeFromNib
+{
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

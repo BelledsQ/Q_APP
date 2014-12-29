@@ -1,0 +1,24 @@
+//
+//  Config.h
+//  Belled
+//
+//  Created by Bellnet on 14-5-4.
+//  Copyright (c) 2014年 Bellnet. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+
+//#define __HOSTNAME__ @"http://192.168.3.150:8113/led_server/api/api.php"
+
+#define __HOSTNAME__ @"http://192.168.3.45/led_server/api/api.php"
+
+//#define __HOSTNAME__ @"http://112.124.64.145/led_server/api/api.php"
+
+#define PageCount 2
+
+#define Counts "10"
+
+#define UDP_IP @"192.168.3.76"
+
+#define UDP_PORT 11600

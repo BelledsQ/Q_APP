@@ -1,0 +1,31 @@
+//
+//  SceneTableViewController.h
+//  Belled
+//
+//  Created by Bellnet on 14-4-18.
+//  Copyright (c) 2014年 Bellnet. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "NetWorkHttp.h"
+#import "SceneTableViewCell.h"
+#import "DetailSceneViewController.h"
+
+@interface SceneTableViewController : UITableViewController<UITableViewDelegate,UITableViewDataSource>
+{
+    NSMutableDictionary *res_dictionary;
+    NSMutableArray *datasource;
+    NSInteger pageNum;
+	NSInteger CountNum;
+    
+    EGORefreshTableHeaderView *_refreshHeaderView;
+    UITableView *lightTableView;
+    BOOL _reloading;
+}
+
+@property(nonatomic,retain) NSMutableArray *datasource;
+
+
+
+//@property(nonatomic,retain) NSMutableDictionary *data;
+@end

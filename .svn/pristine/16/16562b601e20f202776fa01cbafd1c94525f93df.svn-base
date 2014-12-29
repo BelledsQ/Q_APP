@@ -1,0 +1,33 @@
+//
+//  LightTableViewController.h
+//  Belled
+//
+//  Created by Bellnet on 14-4-18.
+//  Copyright (c) 2014年 Bellnet. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "NetWorkHttp.h"
+#import "LightTableViewCell.h"
+#import "LightConViewController.h"
+#import "SetTableViewController.h"
+#import "LightTitleViewController.h"
+#import "ScanViewController.h"
+@interface LightTableViewController : UITableViewController<UITableViewDelegate,UITableViewDataSource,UIPickerViewDelegate>
+{
+    NSMutableDictionary *res_dictionary;
+    NSMutableArray *datasource;
+    NSInteger pageNum;
+	NSInteger CountNum;
+
+    UITableView *lightTableView;
+    BOOL _reloading;
+    NSString *domainsn;
+}
+
+@property(nonatomic,retain) NSMutableArray *datasource;
+@property(nonatomic,retain) IBOutlet UITableView *lightTableView;
+@property(nonatomic,retain) NSString *deviceip,*typeCtrl,*typeCtrl2;
+
+//@property(nonatomic,retain) NSMutableDictionary *data;
+@end

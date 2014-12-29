@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>2A5CD64F-E1FF-430E-BEA3-BB19085C2801</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Belled</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>9B5A0EC4-BA30-4401-97B1-9518AFE0D647</key>
+		<string>svn://112.124.64.145/master/belled_IOS</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Belled.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>9B5A0EC4-BA30-4401-97B1-9518AFE0D647</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>9B5A0EC4-BA30-4401-97B1-9518AFE0D647</key>
+		<string>svn://112.124.64.145/master</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>svn://112.124.64.145/master/belled_IOS/Belled.xcodeproj</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>9B5A0EC4-BA30-4401-97B1-9518AFE0D647</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>9B5A0EC4-BA30-4401-97B1-9518AFE0D647</string>
+			<key>IDESourceControlWCCName</key>
+			<string>belled_IOS</string>
+		</dict>
+	</array>
+</dict>
+</plist>

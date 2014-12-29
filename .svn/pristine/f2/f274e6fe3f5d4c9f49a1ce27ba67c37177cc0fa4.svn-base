@@ -1,0 +1,161 @@
+//
+//  ScanViewController.m
+//  Belled
+//
+//  Created by Bellnet on 14-6-26.
+//  Copyright (c) 2014年 Bellnet. All rights reserved.
+//
+
+#import "ScanViewController.h"
+
+@interface ScanViewController ()
+
+@end
+
+@implementation ScanViewController
+{
+    NSArray *datasource;
+}
+
+@synthesize  scantableView,datasource;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    
+    datasource = [[NSArray alloc] initWithObjects:@"LD24G00014",@"LD24G00015",nil];
+    NSLog(@"%@",datasource);
+    // Do any additional setup after loading the view.
+    
+    scantableView.delegate = self;
+    scantableView.dataSource = self;
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+//实现界面的切换  并把值传递过去
+-(void)pageChange
+{
+    //要从此类界面转换到HomeViewController类的界面,storyboard
+    UITabBarController *tmpEdit = [self.storyboard instantiateViewControllerWithIdentifier:@"HomeViewController"];
+    //- (void)presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated;
+    
+    //打印movie对象里面的值
+    //NSLog(@"%@",movie);
+    
+    //把movie里面的值（name price summary）赋给 EditViewController 类里面的movie对象editMovie
+    //tmpEdit.editMovie = movie;
+    
+    //设置翻页效果
+    tmpEdit.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    /*
+     其他翻页效果：
+     UIModalTransitionStyleCoverVertical
+     UIModalTransitionStyleFlipHorizontal
+     UIModalTransitionStyleCrossDissolve
+     UIModalTransitionStylePartialCurl
+     */
+    
+    //实现页面的切换
+    [self presentModalViewController:tmpEdit animated:YES];
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+ 
+*/
+
+//Delegate tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    
+    // Return the number of sections.
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    
+    // Return the number of rows in the section.
+    //NSLog(@"rows : %d",[data count]);
+    return [datasource count];
+}
+
+//cell
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //NSInteger row = [indexPath row];
+    //static NSString *MyIdentifier = @"reuseIdentifier";
+    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier forIndexPath:indexPath];
+    
+    static NSString *CellIdentifier = @"ScanCell";
+    ScanTableViewCell *cell = (ScanTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[ScanTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    }
+    
+    //---------- CELL BACKGROUND IMAGE -----------------------------
+    //UIImageView *imageView = [[UIImageView alloc] initWithFrame:cell.frame];
+    //UIImage *image = [UIImage imageNamed:@"LightGrey@2x.png"];
+    //imageView.image = image;
+    //cell.backgroundView = imageView;
+    //[[cell textLabel] setBackgroundColor:[UIColor clearColor]];
+    //[[cell detailTextLabel] setBackgroundColor:[UIColor clearColor]];
+    
+    //NSMutableDictionary *datarow = [[NSMutableDictionary alloc] init];
+    
+    NSString *datarow = [[NSString alloc] init];
+    
+    NSString *rows = [NSString stringWithFormat:@"%d",indexPath.row];
+    
+    //NSLog(@"rows : %@",rows);
+    
+    datarow = [datasource objectAtIndex:indexPath.row];
+    
+    //cell.textLabel.text = [datarow objectForKey:@"sn"];
+    
+    cell.sn.text = datarow;
+    //Arrow
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    // Configure the cell...
+    return cell;
+}
+
+//点击cell
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    /*static NSString *detailIdentifier = @"lightdetail";
+    
+    SoundViewController *detail = [self.storyboard instantiateViewControllerWithIdentifier:detailIdentifier];
+    
+    NSMutableDictionary *datarow = [[NSMutableDictionary alloc] init];
+    datarow = [datasource objectAtIndex:indexPath.row];
+    
+    detail.sn = [datarow objectForKey:@"sn"];
+    
+    [self.navigationController pushViewController:detail animated:YES];*/
+    
+}
+
+@end
